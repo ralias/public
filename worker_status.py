@@ -72,8 +72,8 @@ print Status+" "+str(PercentInUse)+"% in use,", str(PercentFree)+"% free.",
 
 if (args.extend == True ):
         print "|Total Workers="+str(TotalWorkers)+\
-        "; Idle Workers="+str(IdleWorkers)+\
         "; Waiting for Connection="+str(WFC)+\
+        "; Open Slot with no current Process="+str(OSWNCP)+\
         "; Starting up="+str(SU)+\
         "; Reading Request="+str(RR)+\
         "; Sending Reply="+str(SR)+\
