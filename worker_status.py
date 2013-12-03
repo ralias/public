@@ -77,7 +77,7 @@ if (args.extend == True ):
         "; Starting up="+str(SU)+\
         "; Reading Request="+str(RR)+\
         "; Sending Reply="+str(SR)+\
-        "; Keepalive (Read)="+str(KR)+\
+        "; Keepalive="+str(KR)+\
         "; DNS Lookup="+str(DL)+\
         "; Closing Connection="+str(CC)+\
         "; Logging="+str(L)+\
