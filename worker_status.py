@@ -55,8 +55,8 @@ L = data.string.count('L')
 GF = data.string.count('G')
 ICOW = data.string.count('I')
 TotalWorkers = WFC + OSWNCP + SU + RR + SR + KR + DL + CC + L + GF + ICOW
-IdleWorkers = OSWNCP
-RunningWorkers = WFC + SU + RR + SR + KR + DL + CC + L + GF + ICOW
+IdleWorkers = OSWNCP + WFC
+RunningWorkers = SU + RR + SR + KR + DL + CC + L + GF + ICOW
 
 PercentInUse = (100 * RunningWorkers) / TotalWorkers
 PercentFree = 100-PercentInUse
