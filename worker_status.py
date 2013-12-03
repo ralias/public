@@ -1,6 +1,7 @@
 #!/usr/bin/python
-import urllib2, re, sys, argparse
+import urllib2, re, sys, argparse, os
 from BeautifulSoup import BeautifulSoup
+from urlparse import urlparse
 
 parser=argparse.ArgumentParser(
 description='Get status and performance information from Apache server-status module.',
@@ -19,8 +20,8 @@ Status = 'OK'
 if (args.c is not None and args.w is not None) and (args.w >= args.c):
         print "Warning threshold is greater than the Critical threshold."
         sys.exit(1)
-
 URL=args.url
+os.environ['http_proxy'] = ''
 html = urllib2.urlopen(URL) 
 html.soup = BeautifulSoup(html.read())
 #print title
@@ -57,32 +58,32 @@ TotalWorkers = WFC + OSWNCP + SU + RR + SR + KR + DL + CC + L + GF + ICOW
 IdleWorkers = OSWNCP
 RunningWorkers = WFC + SU + RR + SR + KR + DL + CC + L + GF + ICOW
 
-PercentInUse = (TotalWorkers/100) * RunningWorkers
+PercentInUse = (100 * RunningWorkers) / TotalWorkers
 PercentFree = 100-PercentInUse
 
-if (args.c is not None) and (args.c <= PercentInUse):
+if (args.c is not None) and (PercentInUse >= args.c):
         Status = "CRITICAL"
         ExitStatus = 2
-if (args.w is not None) and (args.w <= PercentInUse) and (Status == "OK"):
+if (args.w is not None) and (PercentInUse >= args.w) and (Status == "OK"):
         Status = "WARNING"
         ExitStatus = 1
 
 print Status+" "+str(PercentInUse)+"% in use,", str(PercentFree)+"% free.",
 
 if (args.extend == True ):
-        print "|Total Workers =", TotalWorkers,
-        print ", Idle Workers =", IdleWorkers,
-        print ", Waiting for Connection =", WFC,
-        print ", Starting up =", SU,
-        print ", Reading Request =", RR,
-        print ", Sending Reply =", SR,
-        print ", Keepalive (Read) =", KR,
-        print ", DNS Lookup =", DL,
-        print ", Closing Connection =", CC,
-        print ", Logging =", L,
-        print ", Gracefylly finishing =", GF,
-        print ", Open Slot with no current process =", ICOW
+        print "|Total Workers="+str(TotalWorkers)+\
+        "; Idle Workers="+str(IdleWorkers)+\
+        "; Waiting for Connection="+str(WFC)+\
+        "; Starting up="+str(SU)+\
+        "; Reading Request="+str(RR)+\
+        "; Sending Reply="+str(SR)+\
+        "; Keepalive (Read)="+str(KR)+\
+        "; DNS Lookup="+str(DL)+\
+        "; Closing Connection="+str(CC)+\
+        "; Logging="+str(L)+\
+        "; Gracefylly finishing="+str(GF)+\
+        "; Open Slot with no current process="+str(ICOW)
 else:
-        print "|Total Workers =",TotalWorkers,", Running Workers =", RunningWorkers,", Idle Workers =", IdleWorkers
+        print "|Total Workers="+str(TotalWorkers)+"; Running Workers="+str(RunningWorkers)+"; Idle Workers="+str(IdleWorkers)
 
 sys.exit(ExitStatus)
